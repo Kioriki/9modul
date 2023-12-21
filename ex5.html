@@ -1,0 +1,111 @@
+<div class = "form">
+    <h1>5 задание 9 модуля</h1>
+  <input class = "inp-j pageNumber" type="text" placeholder="Введите номер страницы"> </input>
+  <input class = "inp-j limit" type="text" placeholder="Лимит"> </input>
+  <button class = "btn" type="button"><div class ="btn-text">Submit</div></button>
+  </div>
+  <div class ="result"></div>
+
+<style>
+        .form{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    }
+    .inp-j{
+    width: 200px;
+    height: 50px;
+    margin: 0;
+    border: 1px solid black;
+    padding: 5px;
+
+    }
+    .btn{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    width: 10%;
+    cursor: pointer;
+    border: none;
+    background-color: #4682B4;
+    border-radius: 2em;
+    }
+    .btn-text{
+    margin: 10px;
+    color: #FFF;
+    }
+    .btn:hover {
+    box-shadow: 0px 2px 8px 2px;
+    }
+    .btn:active {
+    background-color: #0000FF;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+    }
+</style>
+<script>
+const btnNode = document.querySelector('.btn');
+const inputNode1 = document.querySelector('.pageNumber');
+const inputNode2 = document.querySelector('.limit');
+const resultNode = document.querySelector('.result');
+
+document.addEventListener("DOMContentLoaded", () => {
+    storageItem = localStorage.getItem('lastResponse')
+    if (storageItem) {
+    showResult(JSON.parse(storageItem));
+    }
+});
+
+const useRequest = (pageNumber, limit) => {
+      return fetch('https://jsonplaceholder.typicode.com/photos?_page='+pageNumber+'&_limit='+limit)
+        .then((response) => {
+        return response;
+        })
+        .then(data => {
+            result = data.json();
+            return result;
+        })
+        .catch(() => {
+            console.log('error');
+        });
+
+}
+
+function showResult(apiData) {
+    let book = '';
+    apiData.forEach(item => {
+        const bookBlock = `
+            <div class="book">
+                <img class="book-page-limit" src="${item.thumbnailUrl}">
+                <p>${item.title}</p>
+            </div>
+            `;
+        book += bookBlock;
+    });
+resultNode.innerHTML = book;
+}
+
+btnNode.addEventListener('click', async () => {
+    const value1 = Number (inputNode1.value);
+    const value2 = Number (inputNode2.value);
+    if ((value1  < 1 || value1 > 10 || isNaN(value1)) && (value2 < 1 || value2 > 10 || isNaN(value2))) {
+       resultNode.textContent = 'Номер страницы и лимит вне диапазона от 1 до 10';
+    }else if (value1  < 1 || value1 > 10 || isNaN(value1)){
+        resultNode.textContent = 'Номер страницы вне диапазона от 1 до 10';
+    }else if  (value2 < 1 || value2 > 10 || isNaN(value2)){
+        resultNode.textContent = 'Лимит вне диапазона от 1 до 10';
+    }else {
+      resultNode.textContent = '';
+      const requestResult = await useRequest(value1, value2);
+      localStorage.setItem('lastResponse', JSON.stringify(requestResult));
+      showResult(requestResult);
+    }
+})
+  
+
+
+
+
+</script>
+
+  

@@ -1,0 +1,95 @@
+<h1>3 задание 9 модуля</h1>
+<div class = "form">
+   <input class = "inp-j" type="text" placeholder="Введите число от 1 до 10"> </input>
+  <button class = "btn" type="button"><div class ="btn-text">Нажми меня</div></button>
+</div>
+<div class ="result"></div>
+<style>
+        .form{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    }
+    .inp-j{
+    width: 200px;
+    height: 50px;
+    margin: 0;
+    border: 1px solid black;
+    padding: 5px;
+
+    }
+    .btn{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    width: 10%;
+    cursor: pointer;
+    border: none;
+    background-color: #4682B4;
+    border-radius: 2em;
+    }
+    .btn-text{
+    margin: 10px;
+    color: #FFF;
+    }
+    .btn:hover {
+    box-shadow: 0px 2px 8px 2px;
+    }
+    .btn:active {
+    background-color: #0000FF;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+    }
+</style>
+<script>
+    function useRequest(url, callback) {
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.onload = function() {
+        if (xhr.status != 200) {
+          console.log('Статус ответа: ', xhr.status);
+        } else {
+          const result = JSON.parse(xhr.response);
+          if (callback) {
+            callback(result);
+          }
+        }
+      };
+      
+      xhr.onerror = function() {
+        console.log('Ошибка! Статус ответа: ', xhr.status);
+      };
+      
+      xhr.send();
+    };
+    
+    const btnNode = document.querySelector('.btn');
+    const resultNode = document.querySelector('.result');
+    
+    function showResult(apiData) {
+        let cards = '';
+        apiData.forEach(item => {
+            const cardBlock = `
+                <div class="card">
+                    <img class="card-image" src="${item.url}">
+                    <p>${item.title}</p>
+                </div>
+            `;
+            cards += cardBlock;
+        });
+        resultNode.innerHTML = cards;
+        
+    }
+    
+    btnNode.addEventListener('click', () => {
+        const value = document.querySelector('input').value;
+        if (value < 1 || value > 10) {
+            resultNode.innerHTML = "<p>Число вне диапазона от 1 до 10</p>";
+        } else {
+            url = `https://jsonplaceholder.typicode.com/photos?_limit=${value}`;
+            useRequest(url, showResult)
+        }
+    })
+    </script>
+
+  

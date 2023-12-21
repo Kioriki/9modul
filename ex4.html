@@ -1,0 +1,73 @@
+<div class = "form">
+    <h1>4 задание 9 модуля</h1>
+  <input class = "inp-j inp-width" type="text" placeholder="Введите число от 100 до 300"> </input>
+  <input class = "inp-j inp-height" type="text" placeholder="Введите число от 100 до 300"> </input>
+  <button class = "btn" type="button"><div class ="btn-text">Submit</div></button>
+  </div>
+  <div class ="result"></div>
+
+<style>
+        .form{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    }
+    .inp-j{
+    width: 200px;
+    height: 50px;
+    margin: 0;
+    border: 1px solid black;
+    padding: 5px;
+
+    }
+    .btn{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    width: 10%;
+    cursor: pointer;
+    border: none;
+    background-color: #4682B4;
+    border-radius: 2em;
+    }
+    .btn-text{
+    margin: 10px;
+    color: #FFF;
+    }
+    .btn:hover {
+    box-shadow: 0px 2px 8px 2px;
+    }
+    .btn:active {
+    background-color: #0000FF;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+    }
+</style>
+<script>
+const btnNode = document.querySelector('.btn');
+const inputNode1 = document.querySelector('.inp-width');
+const inputNode2 = document.querySelector('.inp-height');
+const resultNode = document.querySelector('.result');
+
+const useRequest = (val1, val2) => {
+    return fetch('https://dummyimage.com/'+val1+'x'+val2+'/')
+  
+}
+
+btnNode.addEventListener('click', async () => {
+  const value1 = Number (inputNode1.value);
+   const value2 = Number (inputNode2.value);
+  if (value1  < 100 || value1 > 300 || isNaN(value1) || value2 < 100 || value2 > 300 || isNaN(value2)) {
+     resultNode.textContent = 'Одно из чисел вне диапазона от 100 до 300';
+ } else {
+        const requestResult = await useRequest(value1, value2);
+        image = document.createElement('img');
+        image.src = requestResult.url;
+        resultNode.innerHTML = '';
+        resultNode.append(image);
+    }
+})
+
+</script>
+
+  
